@@ -14,12 +14,6 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/BetaJester/pwropt.git
 	GIT_TAG main
 )
-FetchContent_Declare(
-	fmt
-	GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-	GIT_TAG master
-)
-FetchContent_MakeAvailable(fmt)
 FetchContent_MakeAvailable(pwropt)
 
 
@@ -28,7 +22,6 @@ add_library(bj::refraction ALIAS bj_refraction)
 target_include_directories(bj_refraction INTERFACE "include")
 pwropt_target_compile_options(bj_refraction INTERFACE pwr_werror pwr_lefticus)
 pwropt_target_cxx_latest(bj_refraction INTERFACE)
-target_link_libraries(bj_refraction INTERFACE fmt::fmt)
 
 if (${BJ_REFRACTION_BUILD_TESTS})
 	enable_testing()

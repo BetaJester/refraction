@@ -13,6 +13,7 @@ namespace anim {
 
     public:
 
+        virtual ~animal() noexcept = default;
         virtual std::string_view talk() const noexcept = 0;
 
     };

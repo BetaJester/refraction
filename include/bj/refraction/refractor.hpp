@@ -8,38 +8,42 @@
 #include <memory>
 
 #define BJ_REFRACT_ME(class_name, base_class) \
-    static void init_refract(::bj::refract_info<base_class> *info) { \
+    static void init_refract(::bj::refractor<base_class> *info) { \
         info->name = #class_name; \
         info->maker = []() -> std::unique_ptr<base_class>{ return std::make_unique<class_name>(); }; \
     } \
-    static inline ::bj::refract_info<base_class> refract_info{init_refract};
+    static inline ::bj::refractor<base_class> refractor{init_refract};
 
 namespace bj {
 
     template<typename BaseClass>
-    struct refract_info {
+    struct refractor {
         
         using make_object_f = std::unique_ptr<BaseClass>(*)();
-        using initer_f = void(*)(refract_info *);
+        using initer_f = void(*)(refractor *);
 
         std::string name;
         make_object_f maker{ nullptr };
 
-        refract_info(initer_f init) {
+        refractor(initer_f init) {
             init(this);
-            map[name] = this;
+            mappy().try_emplace(name, this);
         }
 
         static std::unique_ptr<BaseClass> make_object(const std::string &name) {
+            const auto &map = mappy();
             if (auto it = map.find(name); it != map.end()) {
-                return map[name]->maker();
+                return it->second->maker();
             } else {
                 return {};
             }
         }
 
     private:
-        static inline std::map<std::string, refract_info *> map;
+        static std::map<std::string, refractor *> &mappy() {
+            static std::map<std::string, refractor *> map;
+            return map;
+        }
     };
 
 

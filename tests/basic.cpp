@@ -7,7 +7,7 @@
 
 TEST_CASE("Basic class creation works", "[basic]") {
 
-    auto x = bj::refract_info<honk::SomeBaseClass>::make_object("honk::SomeClass");
+    auto x = bj::refractor<honk::SomeBaseClass>::make_object("honk::SomeClass");
 
     REQUIRE(x->name() == "honk::SomeClass");
 

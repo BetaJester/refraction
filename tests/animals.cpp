@@ -7,7 +7,7 @@
 
 TEST_CASE("Dogs say woof!", "[animals,dog]") {
 
-    auto jimmy = bj::refract_info<anim::animal>::make_object("dog");
+    auto jimmy = bj::refractor<anim::animal>::make_object("dog");
 
     REQUIRE(jimmy);
 
@@ -17,7 +17,7 @@ TEST_CASE("Dogs say woof!", "[animals,dog]") {
 
 TEST_CASE("Elvy says meow!", "[animals,cat]") {
 
-    auto elvy = bj::refract_info<anim::animal>::make_object("cat");
+    auto elvy = bj::refractor<anim::animal>::make_object("cat");
 
     REQUIRE(elvy);
 
@@ -27,7 +27,7 @@ TEST_CASE("Elvy says meow!", "[animals,cat]") {
 
 TEST_CASE("Failure is an option", "[animals,fail]") {
 
-    auto thing = bj::refract_info<anim::animal>::make_object("thing");
+    auto thing = bj::refractor<anim::animal>::make_object("thing");
 
     REQUIRE_FALSE(thing);
 }
