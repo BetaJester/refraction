@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.19)
 project(bj_refraction)
 
 option(BJ_REFRACTION_BUILD_TESTS "Build tests for bj::refraction" OFF)
+option(BJ_REFRACTION_BUILD_EXAMPLES "Build examples for bj::refraction" OFF)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -26,4 +27,8 @@ pwropt_target_cxx_latest(bj_refraction INTERFACE)
 if (${BJ_REFRACTION_BUILD_TESTS})
 	enable_testing()
 	add_subdirectory("tests")
+endif()
+
+if (${BJ_REFRACTION_BUILD_EXAMPLES})
+	add_subdirectory("example")
 endif()

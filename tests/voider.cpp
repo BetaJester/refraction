@@ -7,7 +7,7 @@
 
 struct voider {
 
-    BJ_REFRACT_ME_VOID(voider);
+    BJ_REFRACT_VOID(voider);
 
     int x{ 100 };
 
@@ -22,4 +22,5 @@ TEST_CASE("void base works", "[void]") {
     REQUIRE(b);
     REQUIRE(b->x == 100);
 
+    delete b;
 }
