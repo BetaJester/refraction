@@ -7,7 +7,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON",
+      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON -DBJ_REFRACTION_BUILD_EXAMPLES=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": ""
     },
@@ -17,7 +17,7 @@
       "configurationType": "Debug",
       "cmakeExecutable": "cmake",
       "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
-      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON",
+      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON -DBJ_REFRACTION_BUILD_EXAMPLES=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_x64" ],
@@ -37,7 +37,7 @@
       "configurationType": "Debug",
       "cmakeExecutable": "cmake",
       "remoteCopySourcesExclusionList": [ ".vs", ".git", "out" ],
-      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON",
+      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON -DBJ_REFRACTION_BUILD_EXAMPLES=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_clang_x64" ],
@@ -57,7 +57,7 @@
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON",
+      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON -DBJ_REFRACTION_BUILD_EXAMPLES=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x86" ]
@@ -68,11 +68,10 @@
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON",
+      "cmakeCommandArgs": "-DBJ_REFRACTION_BUILD_TESTS=ON -DBJ_REFRACTION_BUILD_EXAMPLES=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "clang_cl_x64_x64" ],
-      "variables": []
+      "inheritEnvironments": [ "clang_cl_x64_x64" ]
     }
   ]
 }

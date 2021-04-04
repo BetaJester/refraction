@@ -6,15 +6,16 @@
 
 #include <map>
 #include <memory>
+#include <string>
 
 #define BJ_REFRACT_ME(class_name, base_class) \
     static void init_refract(::bj::refractor<base_class> *info) { \
         info->name = #class_name; \
         info->maker = []() -> std::unique_ptr<base_class>{ return std::make_unique<class_name>(); }; \
     } \
-    static inline ::bj::refractor<base_class> refractor{init_refract};
+    static inline ::bj::refractor<base_class> refractor{init_refract}
 
-#define BJ_REFRACT_ME_VOID(class_name) \
+#define BJ_REFRACT_VOID(class_name) \
     static void init_refract(::bj::refractor<void> *info) { \
         info->name = #class_name; \
         info->maker = []() -> void*{ return new class_name; }; \
