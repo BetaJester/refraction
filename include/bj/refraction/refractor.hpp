@@ -24,6 +24,19 @@
 
 namespace bj {
 
+    namespace impl {
+        [[nodiscard]] inline constexpr std::uint32_t crc32(const std::string_view str) noexcept {
+            std::uint32_t crc = std::numeric_limits<std::uint32_t>::max();
+            for (auto c : str) {
+                crc ^= static_cast<unsigned char>(c);
+                for (std::size_t k{}; k < 8; ++k) {
+                    crc = (crc >> 1) ^ (0x82F63B78 & (0 - (crc & 1)));
+                }
+            }
+            return crc;
+        }
+    } // namespace impl.
+
     template<typename BaseClass>
     struct refractor {
         
@@ -31,16 +44,27 @@ namespace bj {
         using initer_f = void(*)(refractor *);
 
         std::string name;
+        std::uint32_t crc{};
         make_object_f maker{ nullptr };
 
         refractor(initer_f init) {
             init(this);
-            mappy().try_emplace(name, this);
+            crc = impl::crc32(name);
+            mappy().try_emplace(crc, this);
         }
 
         static std::unique_ptr<BaseClass> make_object(const std::string &name) {
             const auto &map = mappy();
-            if (auto it = map.find(name); it != map.end()) {
+            if (auto it = map.find(impl::crc32(name)); it != map.end()) {
+                return it->second->maker();
+            } else {
+                return {};
+            }
+        }
+
+        static std::unique_ptr<BaseClass> make_object(const std::uint32_t crc) {
+            const auto &map = mappy();
+            if (auto it = map.find(crc); it != map.end()) {
                 return it->second->maker();
             } else {
                 return {};
@@ -48,8 +72,8 @@ namespace bj {
         }
 
     private:
-        static std::map<std::string, refractor *> &mappy() {
-            static std::map<std::string, refractor *> map;
+        static std::map<std::uint32_t, refractor *> &mappy() {
+            static std::map<std::uint32_t, refractor *> map;
             return map;
         }
     };
@@ -57,20 +81,31 @@ namespace bj {
     template<>
     struct refractor<void> {
 
-        using make_object_f = void*(*)();
+        using make_object_f = void *(*)();
         using initer_f = void(*)(refractor *);
 
         std::string name;
+        std::uint32_t crc{};
         make_object_f maker{ nullptr };
 
         refractor(initer_f init) {
             init(this);
-            mappy().try_emplace(name, this);
+            crc = impl::crc32(name);
+            mappy().try_emplace(crc, this);
         }
 
-        static void* make_object(const std::string &name) {
+        static void *make_object(const std::string &name) {
             const auto &map = mappy();
-            if (auto it = map.find(name); it != map.end()) {
+            if (auto it = map.find(impl::crc32(name)); it != map.end()) {
+                return it->second->maker();
+            } else {
+                return nullptr;
+            }
+        }
+
+        static void *make_object(const std::uint32_t crc) {
+            const auto &map = mappy();
+            if (auto it = map.find(crc); it != map.end()) {
                 return it->second->maker();
             } else {
                 return nullptr;
@@ -78,11 +113,10 @@ namespace bj {
         }
 
     private:
-        static std::map<std::string, refractor *> &mappy() {
-            static std::map<std::string, refractor *> map;
+        static std::map<std::uint32_t, refractor *> &mappy() {
+            static std::map<std::uint32_t, refractor *> map;
             return map;
         }
     };
-
 
 } // namespace bj.
