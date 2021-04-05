@@ -23,6 +23,6 @@ TEST_CASE("nomacro refractor works", "[nomacro]") {
 
     auto b = bj::instantiate<void>("standalone");
     REQUIRE(b);
-    delete b;
+    delete reinterpret_cast<standalone*>(b);
 
 }
