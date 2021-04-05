@@ -23,9 +23,10 @@ TEST_CASE("nomacro refractor works", "[nomacro]") {
 
     auto a = bj::instantiate<nombase>("nommer");
     REQUIRE(a);
-    REQUIRE(nommer::refractor.info.crc == 0x2feaa36e);
+    REQUIRE(nommer::refractor.crc() == 0x2feaa36e);
 
     auto b = bj::instantiate<void>("vnommer");
     REQUIRE(b);
+    delete b;
 
 }

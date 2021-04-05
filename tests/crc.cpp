@@ -17,7 +17,7 @@ TEST_CASE("crc refractor works", "[crc]") {
     auto a = bj::instantiate<crctester>("crctester");
     REQUIRE(a);
 
-    const auto crc = crctester::refractor.info.crc;
+    const auto crc = crctester::refractor.crc();
     auto b = bj::instantiate<crctester>(crc);
     REQUIRE(b);
 

@@ -23,7 +23,7 @@ namespace honk {
         int id{};
         char ccc{};
 
-        std::string_view name() const noexcept override { return refractor.info.name; }
+        std::string_view name() const noexcept override { return refractor.name(); }
 
     };
 

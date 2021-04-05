@@ -44,7 +44,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.info.name, lengths);
+            out(refractor.name(), lengths);
         }
 
         void describe() const noexcept override {
@@ -66,7 +66,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.info.name, radius);
+            out(refractor.name(), radius);
         }
 
         void describe() const noexcept override {
@@ -88,7 +88,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.info.name, positions);
+            out(refractor.name(), positions);
         }
 
         void describe() const noexcept override {
