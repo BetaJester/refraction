@@ -23,11 +23,11 @@ struct standalone {
 
 int main() {
     // Good place for 'auto', explicit for example.
-    std::unique_ptr<base> object = bj::refractor<base>::make_object("sub");
+    std::unique_ptr<base> object = bj::instantiate<base>("sub");
     std::puts(object->name());
 
     // Good place for unique_ptr and a cast one liner, explicit for example again.
-    void *sa_void_object = bj::refractor<void>::make_object("standalone");
+    void *sa_void_object = bj::instantiate<void>("standalone");
     standalone *sa_object = reinterpret_cast<standalone *>(sa_void_object);
     delete sa_object;
 }

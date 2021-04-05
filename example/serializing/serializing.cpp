@@ -44,7 +44,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.name, lengths);
+            out(refractor.info.name, lengths);
         }
 
         void describe() const noexcept override {
@@ -66,7 +66,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.name, radius);
+            out(refractor.info.name, radius);
         }
 
         void describe() const noexcept override {
@@ -88,7 +88,7 @@ namespace ex {
         }
 
         void binaryize(bj::obinaryizer &out) const override {
-            out(refractor.name, positions);
+            out(refractor.info.name, positions);
         }
 
         void describe() const noexcept override {
@@ -131,7 +131,7 @@ void unbuild(bj::ibinaryizer &in) {
     for (unsigned int i{}; i < count; ++i) {
 
         in(type);
-        auto shape = bj::refractor<ex::base_shape>::make_object(type);
+        auto shape = bj::instantiate<ex::base_shape>(type);
         in(*shape);
         shape->describe();
     }
