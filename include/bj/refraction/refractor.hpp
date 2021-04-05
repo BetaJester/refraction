@@ -8,7 +8,6 @@
 #include <memory> // unique_ptr
 #include <string>
 #include <string_view>
-#include <concepts>
 #include <unordered_map>
 #include <utility> // move.
 #include <cstdint> // uint32_t
@@ -37,7 +36,7 @@ namespace bj::impl::inline v1 {
         using type = std::unique_ptr<Base>;
 
         // Returns a pointer type of the base class, for a new object of the derived class.
-        template<std::derived_from<Base> Derived>
+        template<typename Derived>
         [[nodiscard]] static type make() { return std::make_unique<Derived>(); }
     };
 

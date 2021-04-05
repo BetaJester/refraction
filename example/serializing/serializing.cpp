@@ -18,7 +18,7 @@
 
 namespace ex {
 
-    class base_shape {
+    class [[nodiscard]] base_shape {
     
     public:
 
@@ -31,7 +31,7 @@ namespace ex {
     
     };
 
-    class triangle : public base_shape {
+    class [[nodiscard]] triangle final : public base_shape {
 
         BJ_REFRACT_ME(ex::triangle, ex::base_shape);
 
@@ -53,7 +53,7 @@ namespace ex {
 
     };
 
-    class circle : public base_shape {
+    class [[nodiscard]] circle final : public base_shape {
 
         BJ_REFRACT_ME(ex::circle, ex::base_shape);
 
@@ -75,7 +75,7 @@ namespace ex {
 
     };
 
-    class polygon : public base_shape {
+    class [[nodiscard]] polygon final : public base_shape {
 
         BJ_REFRACT_ME(ex::polygon, ex::base_shape);
 

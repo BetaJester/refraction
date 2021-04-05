@@ -2,17 +2,18 @@
 // See README.md, LICENSE, or go to https://github.com/BetaJester/refraction
 // for details.
 
-#include <cstdio>
+#include <iostream>
+#include <string_view>
 #include <bj/refraction/refractor.hpp>
 
 struct base {
     virtual ~base() = default;
-    virtual const char *name() { return "base"; }
+    virtual std::string_view name() { return "base"; }
 };
 
-struct sub : base {
-    BJ_REFRACT_ME(sub, base);
-    const char *name() override { return "sub"; }
+struct derived : base {
+    BJ_REFRACT_ME(derived, base);
+    std::string_view name() override { return "derived"; }
 };
 
 struct standalone {
@@ -23,11 +24,12 @@ struct standalone {
 
 int main() {
     // Good place for 'auto', explicit for example.
-    std::unique_ptr<base> object = bj::instantiate<base>("sub");
-    std::puts(object->name());
+    std::unique_ptr<base> object = bj::instantiate<base>("derived");
+    std::cout << "Object class name: " << object->name() << std::endl;
 
     // Good place for unique_ptr and a cast one liner, explicit for example again.
     void *sa_void_object = bj::instantiate<void>("standalone");
     standalone *sa_object = reinterpret_cast<standalone *>(sa_void_object);
+    std::cout << "Standalone size: " << sa_object->size() << std::endl;
     delete sa_object;
 }
