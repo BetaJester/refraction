@@ -1,2 +1,6 @@
+# Copyright (C) 2021 Glenn Duncan <betajester@betajester.com>
+# See README.md, LICENSE, or go to https://github.com/BetaJester/refraction
+# for details.
+
 add_subdirectory("readme")
 add_subdirectory("serializing")
