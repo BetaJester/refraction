@@ -6,17 +6,12 @@ cmake_minimum_required(VERSION 3.19)
 
 project(bj_refraction)
 
-option(BJ_REFRACTION_BUILD_TESTS "Build tests for bj::refraction" OFF)
+option(BJ_REFRACTION_BUILD_TESTS	"Build tests for bj::refraction"	OFF)
 option(BJ_REFRACTION_BUILD_EXAMPLES "Build examples for bj::refraction" OFF)
 
 include(FetchContent)
-FetchContent_Declare(
-	pwropt
-	GIT_REPOSITORY https://github.com/BetaJester/pwropt.git
-	GIT_TAG main
-)
+FetchContent_Declare(pwropt GIT_REPOSITORY https://github.com/BetaJester/pwropt.git GIT_TAG main)
 FetchContent_MakeAvailable(pwropt)
-
 
 add_library(bj_refraction INTERFACE "include/bj/refraction/refractor.hpp")
 add_library(bj::refraction ALIAS bj_refraction)
