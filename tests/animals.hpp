@@ -9,7 +9,7 @@
 
 namespace anim {
 
-    class animal {
+    class [[nodiscard]] animal {
 
     public:
 
@@ -18,7 +18,7 @@ namespace anim {
 
     };
 
-    class dog : public animal {
+    class [[nodiscard]] dog final : public animal {
 
         BJ_REFRACT_ME(dog, animal);
 
@@ -28,7 +28,7 @@ namespace anim {
 
     };
 
-    class cat : public animal {
+    class [[nodiscard]] cat final : public animal {
 
         BJ_REFRACT_ME(cat, animal);
 
