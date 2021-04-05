@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${Catch2_SOURCE_DIR}/contrib")
 include(Catch)
 include(CTest)
 
-add_executable(bj_refraction_tests "main.cpp" "SomeClass.hpp" "basic.cpp" "animals.hpp" "animals.cpp" "voider.cpp" "crc.cpp")
+add_executable(bj_refraction_tests "main.cpp" "SomeClass.hpp" "basic.cpp" "animals.hpp" "animals.cpp" "voider.cpp" "crc.cpp" "nomacro.cpp")
 pwropt_target_compile_options(bj_refraction_tests PRIVATE pwr_werror pwr_lefticus)
 pwropt_target_cxx_latest(bj_refraction_tests PRIVATE)
 target_link_libraries(bj_refraction_tests PRIVATE Catch2 bj::refraction)

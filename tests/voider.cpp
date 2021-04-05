@@ -15,7 +15,7 @@ struct voider {
 
 TEST_CASE("void base works", "[void]") {
 
-    auto a = bj::refractor<void>::make_object("voider");
+    auto a = bj::instantiate<void>("voider");
     auto b = reinterpret_cast<voider *>(a);
     
     REQUIRE(a);

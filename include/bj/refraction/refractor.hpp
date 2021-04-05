@@ -4,27 +4,14 @@
 
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
-
-#define BJ_REFRACT_ME(class_name, base_class) \
-    static void init_refract(::bj::refractor<base_class> *info) { \
-        info->name = #class_name; \
-        info->maker = []() -> std::unique_ptr<base_class>{ return std::make_unique<class_name>(); }; \
-    } \
-    static inline ::bj::refractor<base_class> refractor{init_refract}
-
-#define BJ_REFRACT_VOID(class_name) \
-    static void init_refract(::bj::refractor<void> *info) { \
-        info->name = #class_name; \
-        info->maker = []() -> void*{ return new class_name; }; \
-    } \
-    static inline ::bj::refractor<void> refractor{init_refract};
 
 namespace bj {
 
     namespace impl {
+
         [[nodiscard]] inline constexpr std::uint32_t crc32(const std::string_view str) noexcept {
             std::uint32_t crc = std::numeric_limits<std::uint32_t>::max();
             for (auto c : str) {
@@ -35,88 +22,74 @@ namespace bj {
             }
             return crc;
         }
+
+        template<typename T> struct make_return {
+            using type = std::unique_ptr<T>;
+            template<typename C> static type make() { return std::make_unique<C>(); }
+        };
+
+        template<> struct make_return<void> {
+            using type = void*;
+            template<typename C> static type make() { return new C; }
+        };
+
+        template<typename Base>
+        struct refractor_info {
+            using return_info = make_return<Base>;
+            using make_object_f = typename return_info::type(*)();
+            std::uint32_t crc{};
+            std::string name;
+            make_object_f maker{ nullptr };
+        };
+
+        template<typename Base>
+        struct map {
+            using map_t = std::unordered_map<std::uint32_t, refractor_info<Base>*>;
+            static map_t &get() {
+                static map_t map;
+                return map;
+            }
+        };
+
     } // namespace impl.
 
-    template<typename BaseClass>
+    template<typename Base> using refract_return_t = typename impl::refractor_info<Base>::return_info::type;
+    template<typename Child, typename Base> refract_return_t<Base> refract_make() {
+        return impl::refractor_info<Base>::return_info::template make<Child>();
+    }
+
+    template<typename Base>
+    refract_return_t<Base> instantiate(const std::string_view name) {
+        const auto &map = impl::map<Base>::get();
+        if (auto it = map.find(impl::crc32(name)); it != map.end()) {
+            return it->second->maker();
+        } else {
+            return {};
+        }
+    }
+
+    template<typename Base>
+    refract_return_t<Base> instantiate(const std::uint32_t crc) {
+        const auto &map = impl::map<Base>::get();
+        if (auto it = map.find(crc); it != map.end()) {
+            return it->second->maker();
+        } else {
+            return {};
+        }
+    }
+
+    template<typename Child, typename Base>
     struct refractor {
-        
-        using make_object_f = std::unique_ptr<BaseClass>(*)();
-        using initer_f = void(*)(refractor *);
-
-        std::string name;
-        std::uint32_t crc{};
-        make_object_f maker{ nullptr };
-
-        refractor(initer_f init) {
-            init(this);
-            crc = impl::crc32(name);
-            mappy().try_emplace(crc, this);
+        refractor(std::string name) {
+            info.crc = impl::crc32(name);
+            info.name = std::move(name);
+            info.maker = []() -> refract_return_t<Base> { return refract_make<Child, Base>(); };
+            impl::map<Base>::get().emplace(info.crc, &info);
         }
-
-        static std::unique_ptr<BaseClass> make_object(const std::string &name) {
-            const auto &map = mappy();
-            if (auto it = map.find(impl::crc32(name)); it != map.end()) {
-                return it->second->maker();
-            } else {
-                return {};
-            }
-        }
-
-        static std::unique_ptr<BaseClass> make_object(const std::uint32_t crc) {
-            const auto &map = mappy();
-            if (auto it = map.find(crc); it != map.end()) {
-                return it->second->maker();
-            } else {
-                return {};
-            }
-        }
-
-    private:
-        static std::map<std::uint32_t, refractor *> &mappy() {
-            static std::map<std::uint32_t, refractor *> map;
-            return map;
-        }
+        impl::refractor_info<Base> info;
     };
 
-    template<>
-    struct refractor<void> {
-
-        using make_object_f = void *(*)();
-        using initer_f = void(*)(refractor *);
-
-        std::string name;
-        std::uint32_t crc{};
-        make_object_f maker{ nullptr };
-
-        refractor(initer_f init) {
-            init(this);
-            crc = impl::crc32(name);
-            mappy().try_emplace(crc, this);
-        }
-
-        static void *make_object(const std::string &name) {
-            const auto &map = mappy();
-            if (auto it = map.find(impl::crc32(name)); it != map.end()) {
-                return it->second->maker();
-            } else {
-                return nullptr;
-            }
-        }
-
-        static void *make_object(const std::uint32_t crc) {
-            const auto &map = mappy();
-            if (auto it = map.find(crc); it != map.end()) {
-                return it->second->maker();
-            } else {
-                return nullptr;
-            }
-        }
-
-    private:
-        static std::map<std::uint32_t, refractor *> &mappy() {
-            static std::map<std::uint32_t, refractor *> map;
-            return map;
-        }
-    };
+#define BJ_REFRACT_ME(Child, Base) static inline ::bj::refractor<Child, Base> refractor { #Child }
+#define BJ_REFRACT_VOID(Child) static inline ::bj::refractor<Child, void> refractor { #Child }
 
 } // namespace bj.

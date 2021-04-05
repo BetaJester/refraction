@@ -14,11 +14,11 @@ struct crctester {
 
 TEST_CASE("crc refractor works", "[crc]") {
 
-    auto a = bj::refractor<crctester>::make_object("crctester");
+    auto a = bj::instantiate<crctester>("crctester");
     REQUIRE(a);
 
-    const auto crc = crctester::refractor.crc;
-    auto b = bj::refractor<crctester>::make_object(crc);
+    const auto crc = crctester::refractor.info.crc;
+    auto b = bj::instantiate<crctester>(crc);
     REQUIRE(b);
 
 }
