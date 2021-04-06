@@ -12,13 +12,13 @@ struct base {
 };
 
 struct derived : base {
-    BJ_REFRACT_ME(derived, base);
+    bjrefraction<derived, base> refractor;
     std::string_view name() override { return "derived"; }
 };
 
 struct standalone {
     // No base class? Void pointers, good luck.
-    BJ_REFRACT_VOID(standalone);
+    bjrefraction<standalone> refractor;
     const int size() { return 42; }
 };
 

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <utility> // move.
 #include <cstdint> // uint32_t
+#include "nameit.hpp"
 
 // Implementation details, don't touch.
 namespace bj::impl::inline v1 {
@@ -112,11 +113,21 @@ namespace bj::inline v1 {
 
     // Stores and builds information relating to a type into a list of types
     // registered for a specific base, or void.
-    template<typename Derived, typename Base>
+    template<typename Derived, typename Base = void>
     struct [[nodiscard]] refractor {
+
+        // Construct a refractor with a specific name.
         refractor(std::string name) {
             info.crc = impl::crc32(name);
             info.name = std::move(name);
+            info.maker = []() -> refract_return_t<Base> { return refract_make<Derived, Base>(); };
+            impl::map<Base>::get().emplace(info.crc, &info);
+        }
+
+        // Construct a refractor with a discovered name.
+        refractor() {
+            info.name = bj::gettype<Derived>();
+            info.crc = impl::crc32(info.name);
             info.maker = []() -> refract_return_t<Base> { return refract_make<Derived, Base>(); };
             impl::map<Base>::get().emplace(info.crc, &info);
         }
@@ -136,10 +147,4 @@ namespace bj::inline v1 {
 
 } // namespace bj.
 
-// Stores and builds information relating to a type into a list of types
-// registered for a specific base.
-#define BJ_REFRACT_ME(Derived, Base) static inline ::bj::refractor<Derived, Base> refractor { #Derived }
-
-// Stores and builds information relating to a type into a list of types
-// registered for void.
-#define BJ_REFRACT_VOID(Class) static inline ::bj::refractor<Class, void> refractor { #Class }
+#define bjrefraction static inline const ::bj::refractor

@@ -27,13 +27,13 @@ struct base {
 };
 
 struct derived : base {
-    BJ_REFRACT_ME(derived, base);
+    bjrefraction<derived, base> refractor;
     std::string_view name() override { return "derived"; }
 };
 
 struct standalone {
     // No base class? Void pointers, good luck.
-    BJ_REFRACT_VOID(standalone);
+    bjrefraction<standalone> refractor;
     const int size() { return 42; }
 };
 
@@ -63,23 +63,23 @@ I didn't really need a reflection library, so I took a day to knock this togethe
 
 ## Without Macros
 
-You can of course, avoid the use of macros at all, they expand to the following single lines, using the types from the [example](#example).
+You can of course, avoid the use of the `bjrefraction` macro, it expands to the following single lines, using the types from the [example](#example). It simply exists to save remembering `static inline` everytime (const isn't strictly necessary). You can choose to not use inline statics too and define them in a source file elsewhere. 
 
 ```cpp
 struct base {};
 
 struct derived : base {
-    static inline bj::refractor<derived, base> refractor{ "derived" };
+    static inline const bj::refractor<derived, base> refractor;
 };
 
 struct standalone {
-    static inline bj::refractor<standalone, void> refractor{ "standalone" };
+    static inline const bj::refractor<standalone> refractor;
 };
 ```
 
 ## Thing's You Need To Know
 
-* Due to macros, the string needed to find the class is exactly what you pass `BJ_REFRACT_ME` or `BJ_REFRACT_VOID`, meaning if you pass the namespace then it is part of the string, this may actually be something you want. If you don't use macros you can choose any string.
+* `bj::refractor` has two constructors, a default on that discovers the type name by use of macros, and one that takes a string. There is a chance that unusual compilers could fail the detection, or the macros could get different results on different compilers when using template arguments of types from differing libraries. If you encounter these issues please report them as bugs, and use explicitly defined strings while we look into it.
 * There is one static object for each class that uses refraction, and one list of registered types per *base type given* and one for `void` used as a base type. To summarize the cost:
   * Classes refracted - one static object.
   * Objects of refracted classes - nothing.

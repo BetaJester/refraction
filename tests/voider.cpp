@@ -7,7 +7,7 @@
 
 struct voider {
 
-    BJ_REFRACT_VOID(voider);
+    bjrefraction<voider> refractor;
 
     int x{ 100 };
 

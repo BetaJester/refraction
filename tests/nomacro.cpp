@@ -8,11 +8,11 @@
 struct base {};
 
 struct derived : base {
-    static inline bj::refractor<derived, base> refractor{ "derived" };
+    static inline const bj::refractor<derived, base> refractor{ "derived" };
 };
 
 struct standalone {
-    static inline bj::refractor<standalone, void> refractor{ "standalone" };
+    static inline const bj::refractor<standalone, void> refractor{ "standalone" };
 };
 
 TEST_CASE("nomacro refractor works", "[nomacro]") {
