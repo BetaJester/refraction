@@ -9,18 +9,18 @@
 
 namespace anim {
 
-    class [[nodiscard]] animal {
+    class [[nodiscard]] animal_auto {
 
     public:
 
-        virtual ~animal() noexcept = default;
+        virtual ~animal_auto() noexcept = default;
         virtual std::string_view talk() const noexcept = 0;
 
     };
 
-    class [[nodiscard]] dog final : public animal {
+    class [[nodiscard]] dog_auto final : public animal_auto{
 
-        bjrefraction<dog, animal> refractor{"dog"};
+        static inline bj::refractor<dog_auto, animal_auto> refractor;
 
     public:
 
@@ -28,9 +28,9 @@ namespace anim {
 
     };
 
-    class [[nodiscard]] cat final : public animal {
+    class [[nodiscard]] cat_auto final : public animal_auto{
 
-        bjrefraction<cat, animal> refractor{"cat"};
+        static inline bj::refractor<cat_auto, animal_auto> refractor;
 
     public:
 

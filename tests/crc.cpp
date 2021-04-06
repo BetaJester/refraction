@@ -7,7 +7,7 @@
 
 struct crctester {
 
-    BJ_REFRACT_ME(crctester, crctester);
+    bjrefraction<crctester, crctester> refractor;
 
     int x{ 203 };
 };
