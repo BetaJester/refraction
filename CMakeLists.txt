@@ -13,7 +13,7 @@ include(FetchContent)
 FetchContent_Declare(pwropt GIT_REPOSITORY https://github.com/BetaJester/pwropt.git GIT_TAG main)
 FetchContent_MakeAvailable(pwropt)
 
-add_library(bj_refraction INTERFACE "include/bj/refraction/refractor.hpp" "include/bj/refraction/nameit.hpp")
+add_library(bj_refraction INTERFACE "include/bj/refraction/refractor.hpp" "include/bj/refraction/nameof.hpp")
 add_library(bj::refraction ALIAS bj_refraction)
 target_include_directories(bj_refraction INTERFACE "include")
 pwropt_target_compile_options(bj_refraction INTERFACE pwr_werror pwr_lefticus)
