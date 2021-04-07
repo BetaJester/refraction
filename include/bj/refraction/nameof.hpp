@@ -32,19 +32,19 @@ namespace bj::inline v1 {
         class AAAdetectBBB {};
 
         // Completely remove substrings from a string.
-        [[nodiscard]] inline bjcxstring void remove_substr(std::string &str, std::string_view substr) noexcept
+        inline bjcxstring void remove_substr(std::string &str, std::string_view substr) noexcept
         {
             std::string::size_type start{};
             while (start != std::string::npos) {
                 start = str.find(substr);
                 if (start != std::string::npos) {
-                    str.erase(begin(str) + start, begin(str) + start + size(substr));
+                    str.erase(start, size(substr));
                 }
             }
-        };
+        }
 
         // Replace substrings in a string.
-        [[nodiscard]] inline bjcxstring void replace_substr(std::string &str, std::string_view subold, std::string_view subnew) noexcept
+        inline bjcxstring void replace_substr(std::string &str, std::string_view subold, std::string_view subnew) noexcept
         {
             std::string::size_type start{};
             while (start != std::string::npos) {
@@ -53,7 +53,7 @@ namespace bj::inline v1 {
                     str.replace(start, size(subold), subnew);
                 }
             }
-        };
+        }
 
     } // namespace bj::inline v1::impl.
 
